@@ -1,37 +1,39 @@
-name: Fetch the blockchain data and dump data on json format every 1 hour
+name: Fetch blockchain data every 8 hours
+
 on:
   push:
     branches:
       - master
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '0 */8 * * *'
+  workflow_dispatch:
+
 permissions:
   contents: write
-  packages: write
+
 jobs:
-  deploy:
+  fetch:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
-
+        uses: actions/checkout@v5
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.13'
           cache: 'pip'
 
       - name: Install dependencies
         run: pip install -r requirements.txt
-       
+
       - name: Run script
         run: python3 tx.py
-      
+
       - name: Commit and push changes
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "Divakar Raju Mandapati"
+          git config --global user.email "draju@outlook.com"
           git add transactions.json
           git commit -m "Update transactions.json" || echo "No changes to commit"
-          git push   
+          git push

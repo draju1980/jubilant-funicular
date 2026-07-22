@@ -1,5 +1,6 @@
 import requests
 import json
+import sys
 # from dotenv import load_dotenv
 # import os
 
@@ -8,8 +9,9 @@ import json
 # WALLET_ADDRESS = "0x00000000219ab540356cBB839Cbe05303d7705Fa"
 
 def fetch_transactions():
-    url = f"https://api.etherscan.io/api?module=account&action=txlist&address=0x00000000219ab540356cBB839Cbe05303d7705Fa&startblock=0&endblock=99999999&page=1&offset=100&sort=desc&apikey=UUS1IK6MQFRV6TC935VUXNZJZR8NI41WUT"
-    
+    # Etherscan API V2 (V1 was deprecated); chainid=1 is Ethereum mainnet.
+    url = f"https://api.etherscan.io/v2/api?chainid=1&module=account&action=txlist&address=0x00000000219ab540356cBB839Cbe05303d7705Fa&startblock=0&endblock=99999999&page=1&offset=100&sort=desc&apikey=UUS1IK6MQFRV6TC935VUXNZJZR8NI41WUT"
+
     response = requests.get(url)
     data = response.json()
 
@@ -18,6 +20,7 @@ def fetch_transactions():
             json.dump(data["result"], f, indent=4)
         print("Transactions saved to transactions.json")
     else:
-        print("Error fetching transactions:", data["message"])
+        print("Error fetching transactions:", data.get("message"), "-", data.get("result"))
+        sys.exit(1)
 
 fetch_transactions()
