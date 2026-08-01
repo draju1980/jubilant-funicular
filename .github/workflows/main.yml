@@ -1,11 +1,11 @@
-name: Fetch blockchain data every 8 hours
+name: Fetch blockchain data every 12 hours
 
 on:
   push:
     branches:
       - master
   schedule:
-    - cron: '0 */8 * * *'
+    - cron: '0 */12 * * *'
   workflow_dispatch:
 
 permissions:
